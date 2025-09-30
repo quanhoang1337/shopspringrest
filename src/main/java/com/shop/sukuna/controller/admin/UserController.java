@@ -54,10 +54,12 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id) throws IdInvalidException {
 
-        if (id >= 400) {
-            throw new IdInvalidException("Id khong lon hon 400");
-        }
         User user = this.userService.fetchUserById(id);
+
+        if (user == null) {
+            throw new IdInvalidException("User với id = " + id + " không tồn tại");
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(user);
 
     }
