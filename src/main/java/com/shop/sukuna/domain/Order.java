@@ -1,23 +1,16 @@
 package com.shop.sukuna.domain;
 
 import java.time.Instant;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.sukuna.util.SecurityUtil;
-import com.shop.sukuna.util.constant.GenderEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -26,32 +19,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "orders")
 @Getter
 @Setter
-public class User {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String name;
+    private long totalPrice;
 
-    @NotBlank(message = "Email không được để trống")
-    private String email;
-
-    @NotBlank(message = "Password không được để trống")
-    private String password;
-
-    private int age;
-
-    @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
-
-    private String address;
+    @NotBlank(message = "Tên người nhận không được để trống")
+    private String receiverName;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
+    @NotBlank(message = "Địa chỉ không được để trống")
+    private String receiverAddress;
+
+    @NotBlank(message = "Số điện thoại không được để trống")
+    private String receiverPhone;
+
+    private String status;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String paymentStatus;
+
+    private String paymentMethod;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -59,12 +53,8 @@ public class User {
     private String updatedBy;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
-    List<Order> order;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @PrePersist
     public void handleBeforeCreate() {
