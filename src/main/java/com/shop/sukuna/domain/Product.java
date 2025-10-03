@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -22,45 +23,41 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "product")
 @Getter
 @Setter
-public class Order {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long totalPrice;
+    @NotBlank(message = "Tên sản phẩm không được để trống")
+    private String name;
 
-    @NotBlank(message = "Tên người nhận không được để trống")
-    private String receiverName;
+    @NotBlank(message = "Giá sản phẩm không được để trống")
+    private double price;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    @NotBlank(message = "Địa chỉ không được để trống")
-    private String receiverAddress;
-
-    @NotBlank(message = "Số điện thoại không được để trống")
-    private String receiverPhone;
-
-    private String status;
+    @NotBlank(message = "Ảnh không được để trống")
+    private String image;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String paymentStatus;
+    private String detailDesc;
 
-    private String paymentMethod;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String shortDesc;
 
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
     private String updatedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetail;
+
+    @OneToOne
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
 
     @PrePersist
     public void handleBeforeCreate() {

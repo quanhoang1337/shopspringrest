@@ -1,54 +1,34 @@
 package com.shop.sukuna.domain;
 
 import java.time.Instant;
-import java.util.List;
 
 import com.shop.sukuna.util.SecurityUtil;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "order_detail")
 @Getter
 @Setter
-public class Order {
+public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long totalPrice;
+    private long quantity;
 
-    @NotBlank(message = "Tên người nhận không được để trống")
-    private String receiverName;
-
-    @Column(columnDefinition = "MEDIUMTEXT")
-    @NotBlank(message = "Địa chỉ không được để trống")
-    private String receiverAddress;
-
-    @NotBlank(message = "Số điện thoại không được để trống")
-    private String receiverPhone;
-
-    private String status;
-
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String paymentStatus;
-
-    private String paymentMethod;
+    private double price;
 
     private Instant createdAt;
     private Instant updatedAt;
@@ -56,11 +36,12 @@ public class Order {
     private String updatedBy;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<OrderDetail> orderDetail;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @PrePersist
     public void handleBeforeCreate() {
