@@ -55,8 +55,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetail;
 
-    @OneToOne
-    @JoinColumn(name = "inventory_id")
+    @OneToOne(mappedBy = "product")
     private Inventory inventory;
 
     @PrePersist

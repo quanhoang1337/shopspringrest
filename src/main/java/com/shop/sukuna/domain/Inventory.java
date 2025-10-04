@@ -6,10 +6,10 @@ import java.util.List;
 import com.shop.sukuna.util.SecurityUtil;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -35,7 +35,8 @@ public class Inventory {
     private String createdBy;
     private String updatedBy;
 
-    @OneToOne(mappedBy = "inventory")
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @PrePersist
