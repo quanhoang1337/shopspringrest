@@ -2,6 +2,8 @@ package com.shop.sukuna.controller.admin;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.User;
+import com.shop.sukuna.domain.response.PaginationResponse;
 import com.shop.sukuna.domain.response.ResCreateUserDTO;
+import com.shop.sukuna.domain.response.ResUpdateUserDTO;
+import com.shop.sukuna.domain.response.ResUserDTO;
 import com.shop.sukuna.service.UserService;
 import com.shop.sukuna.util.annotation.ApiMessage;
 import com.shop.sukuna.util.error.IdInvalidException;
+import com.turkraft.springfilter.boot.Filter;
 
 import jakarta.validation.Valid;
 
@@ -48,7 +54,7 @@ public class UserController {
 
         User newUser = this.userService.createUser(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convert(newUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.toResCreateUserDTO(newUser));
 
     }
 
@@ -69,7 +75,8 @@ public class UserController {
 
     // Fetch user by id
     @GetMapping("/users/{id}")
-    public ResponseEntity<ResCreateUserDTO> getUserById(@PathVariable long id) throws IdInvalidException {
+    public ResponseEntity<ResUserDTO> getUserById(@PathVariable long id)
+            throws IdInvalidException {
 
         User user = this.userService.fetchUserById(id);
 
@@ -77,26 +84,31 @@ public class UserController {
             throw new IdInvalidException("User với id = " + id + " không tồn tại");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(this.userService.convert(user));
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.toResUserDTO(user));
 
     }
 
     // Fetch all users
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<PaginationResponse> getAllUsers(
+            @Filter Specification<User> spec,
+            Pageable pageable) {
 
-        List<User> user = this.userService.fetchAllUsers();
-
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.fetchAllUsers(spec, pageable));
     }
 
     // Update a user
     @PutMapping("/users")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User user)
+            throws IdInvalidException {
 
         User updatedUser = this.userService.updateUser(user);
 
-        return ResponseEntity.ok(updatedUser);
+        if (updatedUser == null) {
+            throw new IdInvalidException("User với id = " + user.getId() + " không tồn tại");
+        }
+
+        return ResponseEntity.ok(this.userService.toResUpdateUserDTO(updatedUser));
     }
 
 }

@@ -33,7 +33,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler(value = {
-            NoResourceFoundException.class,
+            NoResourceFoundException.class
     })
     public ResponseEntity<RestResponse<Object>> handleNotFoundException(Exception ex) {
         RestResponse<Object> res = new RestResponse<Object>();
