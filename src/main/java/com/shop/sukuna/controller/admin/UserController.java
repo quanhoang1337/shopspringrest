@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.User;
+import com.shop.sukuna.domain.response.ResCreateUserDTO;
 import com.shop.sukuna.service.UserService;
+import com.shop.sukuna.util.annotation.ApiMessage;
 import com.shop.sukuna.util.error.IdInvalidException;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class UserController {
@@ -30,20 +34,33 @@ public class UserController {
 
     // Create a user
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    @ApiMessage("Create a user")
+    public ResponseEntity<ResCreateUserDTO> createUser(@Valid @RequestBody User user)
+            throws IdInvalidException {
+
+        boolean isEmailExist = this.userService.isEmailExist(user.getEmail());
+        if (isEmailExist) {
+            throw new IdInvalidException("Email " + user.getEmail() + " đã tồn tại, vui lòng sử dụng email khác");
+        }
 
         String hashPassword = this.passwordEncoder.encode(user.getPassword());
         user.setPassword(hashPassword);
 
         User newUser = this.userService.createUser(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convert(newUser));
 
     }
 
     // Delete a user
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable long id) throws IdInvalidException {
+    public ResponseEntity<Void> deleteUser(@PathVariable long id)
+            throws IdInvalidException {
+
+        User user = this.userService.fetchUserById(id);
+        if (user == null) {
+            throw new IdInvalidException("User với id = " + id + " không tồn tại");
+        }
 
         this.userService.deleteUser(id);
 
@@ -52,7 +69,7 @@ public class UserController {
 
     // Fetch user by id
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable long id) throws IdInvalidException {
+    public ResponseEntity<ResCreateUserDTO> getUserById(@PathVariable long id) throws IdInvalidException {
 
         User user = this.userService.fetchUserById(id);
 
@@ -60,7 +77,7 @@ public class UserController {
             throw new IdInvalidException("User với id = " + id + " không tồn tại");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.convert(user));
 
     }
 
