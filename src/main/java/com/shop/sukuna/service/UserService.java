@@ -125,9 +125,13 @@ public class UserService {
 
     public void updateUserToken(String token, String email) {
         User user = this.getUserByUsername(email);
-        if(user != null){
+        if (user != null) {
             user.setRefreshToken(token);
             this.userRepository.save(user);
         }
+    }
+
+    public User getUserByRefreshTokenAndEmail(String token, String email) {
+        return this.userRepository.findByRefreshTokenAndEmail(token, email);
     }
 }
