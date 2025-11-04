@@ -19,11 +19,12 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 @Getter
 @Setter
 public class Product {
@@ -35,7 +36,7 @@ public class Product {
     @NotBlank(message = "Tên sản phẩm không được để trống")
     private String name;
 
-    @NotBlank(message = "Giá sản phẩm không được để trống")
+    @NotNull(message = "Giá sản phẩm không được để trống")
     private double price;
 
     @NotBlank(message = "Ảnh không được để trống")
