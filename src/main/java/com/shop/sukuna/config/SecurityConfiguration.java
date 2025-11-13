@@ -42,7 +42,8 @@ public class SecurityConfiguration {
                 .csrf(c -> c.disable())
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/", "/users", "/auth/refresh", "/auth/login").permitAll()
+                                .requestMatchers("/", "/users", "/auth/refresh", "/auth/login", "/storage/**")
+                                .permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(caep))
