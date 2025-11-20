@@ -1,4 +1,4 @@
-package com.shop.sukuna.domain.response;
+package com.shop.sukuna.domain.response.file;
 
 import java.time.Instant;
 

@@ -18,6 +18,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +32,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long totalPrice;
+    private long total;
 
     @NotBlank(message = "Tên người nhận không được để trống")
     private String receiverName;
@@ -41,6 +42,7 @@ public class Order {
     private String receiverAddress;
 
     @NotBlank(message = "Số điện thoại không được để trống")
+    @Size(min = 10, message = "Số điện thoại phải có tối thiểu 10 ký tự")
     private String receiverPhone;
 
     private String status;

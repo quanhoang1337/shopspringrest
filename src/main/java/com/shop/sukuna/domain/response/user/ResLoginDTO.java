@@ -1,4 +1,4 @@
-package com.shop.sukuna.domain.response;
+package com.shop.sukuna.domain.response.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

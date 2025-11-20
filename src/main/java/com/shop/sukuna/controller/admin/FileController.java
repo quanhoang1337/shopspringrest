@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.shop.sukuna.domain.response.ResUploadFileDTO;
+import com.shop.sukuna.domain.response.file.ResUploadFileDTO;
 import com.shop.sukuna.service.FileService;
 import com.shop.sukuna.util.annotation.ApiMessage;
 import com.shop.sukuna.util.error.StorageException;
@@ -36,6 +36,7 @@ public class FileController {
         this.fileService = fileService;
     }
 
+    // Upload file
     @PostMapping("/files")
     @ApiMessage("Upload a file")
     public ResponseEntity<ResUploadFileDTO> uploadFile(
@@ -67,6 +68,7 @@ public class FileController {
         return ResponseEntity.ok(res);
     }
 
+    // Download file
     @GetMapping("/files")
     @ApiMessage("Download a file")
     public ResponseEntity<Resource> download(

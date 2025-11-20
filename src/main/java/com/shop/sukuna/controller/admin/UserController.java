@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.User;
-import com.shop.sukuna.domain.response.PaginationResponse;
-import com.shop.sukuna.domain.response.ResCreateUserDTO;
-import com.shop.sukuna.domain.response.ResUpdateUserDTO;
-import com.shop.sukuna.domain.response.ResUserDTO;
+import com.shop.sukuna.domain.response.pagination.PaginationResponse;
+import com.shop.sukuna.domain.response.user.ResCreateUserDTO;
+import com.shop.sukuna.domain.response.user.ResUpdateUserDTO;
+import com.shop.sukuna.domain.response.user.ResUserDTO;
 import com.shop.sukuna.service.UserService;
 import com.shop.sukuna.util.annotation.ApiMessage;
 import com.shop.sukuna.util.error.IdInvalidException;
@@ -42,7 +41,7 @@ public class UserController {
 
     // Create a user
     @PostMapping("/users")
-    @ApiMessage("Create a user")
+    @ApiMessage("Create user")
     public ResponseEntity<ResCreateUserDTO> createUser(@Valid @RequestBody User user)
             throws IdInvalidException {
 
@@ -62,6 +61,7 @@ public class UserController {
 
     // Delete a user
     @DeleteMapping("/users/{id}")
+    @ApiMessage("Delete user")
     public ResponseEntity<Void> deleteUser(@PathVariable long id)
             throws IdInvalidException {
 
@@ -77,6 +77,7 @@ public class UserController {
 
     // Fetch user by id
     @GetMapping("/users/{id}")
+    @ApiMessage("Fetch user")
     public ResponseEntity<ResUserDTO> getUserById(@PathVariable long id)
             throws IdInvalidException {
 
@@ -92,6 +93,7 @@ public class UserController {
 
     // Fetch all users
     @GetMapping("/users")
+    @ApiMessage("Fetch all users")
     public ResponseEntity<PaginationResponse> getAllUsers(
             @Filter Specification<User> spec,
             Pageable pageable) {
@@ -101,6 +103,7 @@ public class UserController {
 
     // Update a user
     @PutMapping("/users")
+    @ApiMessage("Update user")
     public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User user)
             throws IdInvalidException {
 

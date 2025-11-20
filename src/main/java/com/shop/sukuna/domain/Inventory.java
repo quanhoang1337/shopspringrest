@@ -28,6 +28,7 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message = "Số lương ko được để trống")
     private long quantity;
 
     private Instant createdAt;

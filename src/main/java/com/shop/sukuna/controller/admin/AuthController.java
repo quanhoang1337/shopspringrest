@@ -17,7 +17,7 @@ import org.springframework.http.HttpHeaders;
 
 import com.shop.sukuna.domain.User;
 import com.shop.sukuna.domain.dto.LoginDTO;
-import com.shop.sukuna.domain.response.ResLoginDTO;
+import com.shop.sukuna.domain.response.user.ResLoginDTO;
 import com.shop.sukuna.service.UserService;
 import com.shop.sukuna.util.SecurityUtil;
 import com.shop.sukuna.util.annotation.ApiMessage;
@@ -40,6 +40,7 @@ public class AuthController {
                 this.userService = userService;
         }
 
+        // login
         @PostMapping("/auth/login")
         public ResponseEntity<ResLoginDTO> login(@RequestBody LoginDTO loginDTO) {
 
@@ -90,6 +91,7 @@ public class AuthController {
 
         }
 
+        // fetch account
         @GetMapping("/auth/account")
         @ApiMessage("fetch account")
         public ResponseEntity<ResLoginDTO.UserLogin> getAccount() {
@@ -108,6 +110,7 @@ public class AuthController {
                 return ResponseEntity.ok().body(userLogin);
         }
 
+        // get refresh token
         @GetMapping("/auth/refresh")
         @ApiMessage("Get user by refresh token")
         public ResponseEntity<ResLoginDTO> getRefreshToken(
@@ -161,6 +164,7 @@ public class AuthController {
 
         }
 
+        // logout
         @PostMapping("/auth/logout")
         @ApiMessage("Logout user")
         public ResponseEntity<Void> logout() throws IdInvalidException {

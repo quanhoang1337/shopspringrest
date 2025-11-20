@@ -10,10 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.shop.sukuna.domain.Product;
-import com.shop.sukuna.domain.User;
-import com.shop.sukuna.domain.response.PaginationResponse;
-import com.shop.sukuna.domain.response.ResProductDTO;
-import com.shop.sukuna.domain.response.ResUserDTO;
+import com.shop.sukuna.domain.response.pagination.PaginationResponse;
+import com.shop.sukuna.domain.response.product.ResProductDTO;
+import com.shop.sukuna.domain.response.user.ResUserDTO;
 import com.shop.sukuna.repository.ProductRepository;
 
 @Service

@@ -1,4 +1,4 @@
-package com.shop.sukuna.domain.response;
+package com.shop.sukuna.domain.response.user;
 
 import java.time.Instant;
 
@@ -9,12 +9,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ResCreateUserDTO {
+public class ResUpdateUserDTO {
     private long id;
     private String name;
-    private String email;
-    private int age;
     private GenderEnum gender;
     private String address;
-    private Instant createdAt;
+    private int age;
+    private Instant updatedAt;
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.Product;
 import com.shop.sukuna.domain.User;
-import com.shop.sukuna.domain.response.PaginationResponse;
+import com.shop.sukuna.domain.response.pagination.PaginationResponse;
 import com.shop.sukuna.service.ProductService;
 import com.shop.sukuna.util.annotation.ApiMessage;
 import com.shop.sukuna.util.error.IdInvalidException;
@@ -33,12 +33,14 @@ public class ProductController {
         this.productService = productService;
     }
 
+    // Create product
     @PostMapping("/products")
     @ApiMessage("Create product")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.createProduct(product));
     }
 
+    // Fetch product
     @GetMapping("/products")
     @ApiMessage("Fetch products")
     public ResponseEntity<PaginationResponse> getAllProducts(

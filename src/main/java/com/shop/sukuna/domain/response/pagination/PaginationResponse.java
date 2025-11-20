@@ -1,4 +1,4 @@
-package com.shop.sukuna.domain.response;
+package com.shop.sukuna.domain.response.pagination;
 
 import lombok.Getter;
 import lombok.Setter;

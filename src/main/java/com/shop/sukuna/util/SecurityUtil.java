@@ -22,7 +22,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import com.nimbusds.jose.util.Base64;
-import com.shop.sukuna.domain.response.ResLoginDTO;
+import com.shop.sukuna.domain.response.user.ResLoginDTO;
 
 @Service
 public class SecurityUtil {

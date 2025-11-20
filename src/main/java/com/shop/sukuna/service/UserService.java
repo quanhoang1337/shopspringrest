@@ -11,10 +11,10 @@ import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import com.shop.sukuna.domain.User;
-import com.shop.sukuna.domain.response.PaginationResponse;
-import com.shop.sukuna.domain.response.ResCreateUserDTO;
-import com.shop.sukuna.domain.response.ResUpdateUserDTO;
-import com.shop.sukuna.domain.response.ResUserDTO;
+import com.shop.sukuna.domain.response.pagination.PaginationResponse;
+import com.shop.sukuna.domain.response.user.ResCreateUserDTO;
+import com.shop.sukuna.domain.response.user.ResUpdateUserDTO;
+import com.shop.sukuna.domain.response.user.ResUserDTO;
 import com.shop.sukuna.repository.UserRepository;
 
 @Service
