@@ -7,7 +7,6 @@ import com.shop.sukuna.util.SecurityUtil;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +17,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -49,10 +47,6 @@ public class Product {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String shortDesc;
 
-    @NotNull
-    @Min(value = 1, message = "Số lượng cần lớn hơn hoặc bằng 1")
-    private long quantity;
-
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
@@ -67,6 +61,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
     @PrePersist
     public void handleBeforeCreate() {

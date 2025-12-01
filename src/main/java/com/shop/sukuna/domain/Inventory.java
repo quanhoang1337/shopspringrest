@@ -1,7 +1,6 @@
 package com.shop.sukuna.domain;
 
 import java.time.Instant;
-import java.util.List;
 
 import com.shop.sukuna.util.SecurityUtil;
 
@@ -15,7 +14,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,7 +28,7 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "Số lương không được để trống")
+    @NotNull(message = "Số lượng không được để trống")
     private long quantity;
 
     private Instant createdAt;
@@ -40,10 +39,6 @@ public class Inventory {
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
 
     @PrePersist
     public void handleBeforeCreate() {

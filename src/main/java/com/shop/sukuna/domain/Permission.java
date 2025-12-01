@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Permission {
 
     @Id
@@ -43,14 +45,6 @@ public class Permission {
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
-    private String updatedBy;
-
-    public Permission(String name, String apiPath, String method, String module) {
-        this.name = name;
-        this.apiPath = apiPath;
-        this.method = method;
-        this.module = module;
-    }
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "permissions")
     @JsonIgnore

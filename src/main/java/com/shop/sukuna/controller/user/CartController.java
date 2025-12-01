@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.Cart;
 import com.shop.sukuna.domain.Product;
+import com.shop.sukuna.domain.request.ReqProductDTO;
 import com.shop.sukuna.service.CartService;
 import com.shop.sukuna.service.ProductService;
 import com.shop.sukuna.util.annotation.ApiMessage;
@@ -27,20 +28,15 @@ public class CartController {
         this.productService = productService;
     }
 
-    // @PostMapping("/cart")
-    // @ApiMessage("Add product to cart")
-    // public ResponseEntity<Cart> addToCart(@PathVariable long id ,@Valid @RequestBody ...) {
+    @PostMapping("/carts")
+    @ApiMessage("Add product to cart")
+    public ResponseEntity<Cart> addToCart(@Valid @RequestBody ReqProductDTO reqProductDTO) {
 
-    // String email =
-    // SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-    // Product product = this.productService.fetchProductById(id);
+        long productId = reqProductDTO.getId();
 
-    // long productId = id;
-
-    // this.cartService.addProductToCart(email, productId, 1);
-
-    // return "redirect:/";
-    // }
+        return ResponseEntity.ok(this.cartService.addProductToCart(email, productId, reqProductDTO.getQuantity()));
+    }
 
 }

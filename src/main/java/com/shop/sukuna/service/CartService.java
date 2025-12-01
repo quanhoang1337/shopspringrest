@@ -1,10 +1,13 @@
 package com.shop.sukuna.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.shop.sukuna.domain.Cart;
 import com.shop.sukuna.domain.CartDetail;
 import com.shop.sukuna.domain.Product;
+import com.shop.sukuna.domain.User;
 import com.shop.sukuna.repository.CartDetailRepository;
 import com.shop.sukuna.repository.CartRepository;
 import com.shop.sukuna.repository.ProductRepository;
@@ -27,55 +30,55 @@ public class CartService {
         this.cartDetailRepository = cartDetailRepository;
     }
 
-    // public void addProductToCart(String email, long productId, long quantity) {
+    public Cart addProductToCart(String email, long productId, long quantity) {
 
-    // User user = this.userService.getUserByEmail(email);
-    // if (user != null) {
-    // // check user đã có Cart chưa ? nếu chưa -> tạo mới
-    // Cart cart = this.cartRepository.findByUser(user);
+        User user = this.userService.getUserByUsername(email);
 
-    // if (cart == null) {
-    // // tạo mới cart
-    // Cart otherCart = new Cart();
-    // otherCart.setUser(user);
-    // otherCart.setSum(0);
+        // check user đã có Cart chưa ?
+        // nếu chưa -> tạo mới
+        Cart cart = this.cartRepository.findByUser(user);
 
-    // cart = this.cartRepository.save(otherCart);
-    // }
+        if (user != null) {
 
-    // // save cart_detail
-    // // tìm product by id
+            if (cart == null) {
+                // tạo mới cart
+                Cart newCart = new Cart();
+                newCart.setUser(user);
+                newCart.setItemCount(0);
 
-    // Optional<Product> productOptional =
-    // this.productRepository.findById(productId);
-    // if (productOptional.isPresent()) {
-    // Product realProduct = productOptional.get();
+                cart = this.cartRepository.save(newCart);
+            }
 
-    // // check sản phẩm đã từng được thêm vào giỏ hàng trước đây chưa ?
-    // CartDetail oldDetail = this.cartDetailRepository.findByCartAndProduct(cart,
-    // realProduct);
-    // //
-    // if (oldDetail == null) {
-    // CartDetail cd = new CartDetail();
-    // cd.setCart(cart);
-    // cd.setProduct(realProduct);
-    // cd.setPrice(realProduct.getPrice());
-    // cd.setQuantity(quantity);
-    // this.cartDetailRepository.save(cd);
+            // save cart_detail
+            // find product by id
 
-    // // update cart (sum);
-    // int s = cart.getSum() + 1;
-    // cart.setSum(s);
-    // this.cartRepository.save(cart);
-    // session.setAttribute("sum", s);
-    // } else {
-    // oldDetail.setQuantity(oldDetail.getQuantity() + quantity);
-    // this.cartDetailRepository.save(oldDetail);
-    // }
+            Optional<Product> productOptional = this.productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product existProduct = productOptional.get();
 
-    // }
+                // check sản phẩm đã từng được thêm vào giỏ hàng trước đây chưa ?
+                CartDetail existCartDetail = this.cartDetailRepository.findByCartAndProduct(cart, existProduct);
 
-    // }
-    // }
+                if (existCartDetail == null) {
+                    CartDetail cartDetail = new CartDetail();
+                    cartDetail.setCart(cart);
+                    cartDetail.setProduct(existProduct);
+                    cartDetail.setPrice(existProduct.getPrice());
+                    cartDetail.setQuantity(quantity);
+                    this.cartDetailRepository.save(cartDetail);
+
+                    // update cart (total item count (the number of product in cart));
+                    int totalQuantity = cart.getItemCount() + 1;
+                    cart.setItemCount(totalQuantity);
+                    ;
+                    this.cartRepository.save(cart);
+                } else {
+                    existCartDetail.setQuantity(existCartDetail.getQuantity() + quantity);
+                    this.cartDetailRepository.save(existCartDetail);
+                }
+            }
+        }
+        return cart;
+    }
 
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,7 @@ public class Supplier {
     private String supplierName;
 
     @NotBlank(message = "SĐT nhà cung cấp không được để trống")
+    @Size(min = 10, message = "Số điện thoại phải có tối thiểu 10 ký tự")
     private String phone;
 
     @NotBlank(message = "Địa chỉ nhà cung cấp không được để trống")
@@ -35,6 +37,6 @@ public class Supplier {
     private String email;
 
     @OneToMany(mappedBy = "supplier")
-    private List<Inventory> inventories;
+    private List<Product> products;
 
 }
