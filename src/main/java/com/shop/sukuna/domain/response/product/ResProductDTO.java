@@ -18,6 +18,8 @@ public class ResProductDTO {
     private String image;
     private String detailDesc;
     private String shortDesc;
-    private Instant updatedAt;
     private Instant createdAt;
+    private String createdBy;
+    private String categoryName;
+    private String supplierName;
 }

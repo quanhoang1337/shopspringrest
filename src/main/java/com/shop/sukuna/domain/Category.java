@@ -3,9 +3,11 @@ package com.shop.sukuna.domain;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.sukuna.util.SecurityUtil;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,7 +42,8 @@ public class Category {
     private String createdBy;
     private String updatedBy;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @JsonIgnore
     List<Product> product;
 
     @PrePersist

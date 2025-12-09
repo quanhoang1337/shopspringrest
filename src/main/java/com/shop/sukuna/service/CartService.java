@@ -12,8 +12,6 @@ import com.shop.sukuna.repository.CartDetailRepository;
 import com.shop.sukuna.repository.CartRepository;
 import com.shop.sukuna.repository.ProductRepository;
 
-import jakarta.servlet.http.HttpSession;
-
 @Service
 public class CartService {
 
@@ -34,8 +32,7 @@ public class CartService {
 
         User user = this.userService.getUserByUsername(email);
 
-        // check user đã có Cart chưa ?
-        // nếu chưa -> tạo mới
+        // check user đã có Cart chưa ? nếu chưa -> tạo mới
         Cart cart = this.cartRepository.findByUser(user);
 
         if (user != null) {
@@ -51,7 +48,6 @@ public class CartService {
 
             // save cart_detail
             // find product by id
-
             Optional<Product> productOptional = this.productRepository.findById(productId);
             if (productOptional.isPresent()) {
                 Product existProduct = productOptional.get();
@@ -67,10 +63,10 @@ public class CartService {
                     cartDetail.setQuantity(quantity);
                     this.cartDetailRepository.save(cartDetail);
 
-                    // update cart (total item count (the number of product in cart));
+                    // update cart (total item count (the sum of products in cart));
                     int totalQuantity = cart.getItemCount() + 1;
                     cart.setItemCount(totalQuantity);
-                    ;
+
                     this.cartRepository.save(cart);
                 } else {
                     existCartDetail.setQuantity(existCartDetail.getQuantity() + quantity);
@@ -78,6 +74,7 @@ public class CartService {
                 }
             }
         }
+
         return cart;
     }
 

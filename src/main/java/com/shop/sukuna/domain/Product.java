@@ -3,6 +3,7 @@ package com.shop.sukuna.domain;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.sukuna.util.SecurityUtil;
 
 import jakarta.persistence.Column;
@@ -53,9 +54,11 @@ public class Product {
     private String updatedBy;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<OrderDetail> orderDetail;
 
     @OneToOne(mappedBy = "product")
+    @JsonIgnore
     private Inventory inventory;
 
     @ManyToOne

@@ -2,6 +2,8 @@ package com.shop.sukuna.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,9 +31,11 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "cart")
+    @JsonIgnore
     List<CartDetail> cartDetails;
 
 }

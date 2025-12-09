@@ -1,7 +1,5 @@
 package com.shop.sukuna.controller.admin;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -15,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.Product;
-import com.shop.sukuna.domain.User;
 import com.shop.sukuna.domain.response.pagination.PaginationResponse;
+import com.shop.sukuna.domain.response.product.ResProductDTO;
 import com.shop.sukuna.service.ProductService;
 import com.shop.sukuna.util.annotation.ApiMessage;
 import com.shop.sukuna.util.error.IdInvalidException;
@@ -36,7 +34,7 @@ public class ProductController {
     // Create product
     @PostMapping("/products")
     @ApiMessage("Create product")
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity<ResProductDTO> createProduct(@Valid @RequestBody Product product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.productService.createProduct(product));
     }
 
@@ -53,9 +51,9 @@ public class ProductController {
     // Fetch product by id
     @GetMapping("/products/{id}")
     @ApiMessage("Fetch product by id")
-    public ResponseEntity<Product> getProductById(@PathVariable long id) throws IdInvalidException {
+    public ResponseEntity<ResProductDTO> getProductById(@PathVariable long id) throws IdInvalidException {
 
-        Product product = this.productService.fetchProductById(id);
+        ResProductDTO product = this.productService.fetchProductById(id);
         if (product == null) {
             throw new IdInvalidException("Product với id = " + id + " không tồn tại");
         }
@@ -65,8 +63,8 @@ public class ProductController {
 
     // Update product
     @PutMapping("/products")
-    public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product) {
-        Product updatedProduct = this.productService.updateProduct(product);
+    public ResponseEntity<ResProductDTO> updateProduct(@Valid @RequestBody Product product) {
+        ResProductDTO updatedProduct = this.productService.updateProduct(product);
         return ResponseEntity.ok(updatedProduct);
     }
 
