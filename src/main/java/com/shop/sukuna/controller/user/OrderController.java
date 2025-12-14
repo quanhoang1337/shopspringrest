@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.Order;
 import com.shop.sukuna.domain.Product;
+import com.shop.sukuna.domain.User;
+import com.shop.sukuna.domain.request.ReqOrderDTO;
+import com.shop.sukuna.domain.response.order.ResOrderDTO;
 import com.shop.sukuna.domain.response.product.ResProductDTO;
 import com.shop.sukuna.repository.OrderRepository;
 import com.shop.sukuna.service.OrderService;
@@ -29,8 +32,8 @@ public class OrderController {
     // Create product
     @PostMapping("/orders")
     @ApiMessage("Create order")
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.orderService.createProduct(product));
+    public ResponseEntity<ResOrderDTO> createOrder(@Valid @RequestBody ReqOrderDTO reqOrderDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.orderService.placeOrder(reqOrderDTO));
     }
 
 }

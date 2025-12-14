@@ -10,4 +10,6 @@ import com.shop.sukuna.domain.User;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long>, JpaSpecificationExecutor<Cart> {
     Cart findByUser(User user);
+
+    Cart findByUserEmail(String email);
 }

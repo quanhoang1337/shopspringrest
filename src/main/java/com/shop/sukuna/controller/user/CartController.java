@@ -1,7 +1,6 @@
 package com.shop.sukuna.controller.user;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +9,7 @@ import com.shop.sukuna.domain.Cart;
 import com.shop.sukuna.domain.request.ReqProductDTO;
 import com.shop.sukuna.service.CartService;
 import com.shop.sukuna.service.ProductService;
+import com.shop.sukuna.util.SecurityUtil;
 import com.shop.sukuna.util.annotation.ApiMessage;
 
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ public class CartController {
     @ApiMessage("Add product to cart")
     public ResponseEntity<Cart> addToCart(@Valid @RequestBody ReqProductDTO reqProductDTO) {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityUtil.getCurrentUserLogin().orElse(null);
 
         long productId = reqProductDTO.getId();
 
