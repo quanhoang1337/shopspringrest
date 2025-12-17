@@ -27,14 +27,14 @@ public class ReqOrderDTO {
 
     private String paymentMethod;
 
-    private List<OrderItemDTO> orderItems;
+    private List<ReqOrderItemDTO> orderItems;
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class OrderItemDTO {
-        private long id;
+    public static class ReqOrderItemDTO {
+        private long productId;
         private int quantity;
     }
 

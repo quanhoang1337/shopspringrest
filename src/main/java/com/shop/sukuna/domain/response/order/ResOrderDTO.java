@@ -1,5 +1,7 @@
 package com.shop.sukuna.domain.response.order;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,14 +29,15 @@ public class ResOrderDTO {
 
     private long total;
 
+    private List<ResOrderItemDTO> orderItems;
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class OrderItemDTO {
+    public static class ResOrderItemDTO {
         private long id;
         private int quantity;
     }
-    
 
 }

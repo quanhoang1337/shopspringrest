@@ -2,6 +2,7 @@ package com.shop.sukuna.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import com.shop.sukuna.domain.Order;
 import com.shop.sukuna.domain.Product;
 import com.shop.sukuna.domain.User;
 import com.shop.sukuna.domain.request.ReqOrderDTO;
-import com.shop.sukuna.domain.request.ReqOrderDTO.OrderItemDTO;
+import com.shop.sukuna.domain.request.ReqOrderDTO.ReqOrderItemDTO;
 import com.shop.sukuna.domain.response.order.ResOrderDTO;
 import com.shop.sukuna.domain.response.user.ResCreateUserDTO;
 import com.shop.sukuna.repository.CartRepository;
@@ -40,43 +41,35 @@ public class OrderService {
     public ResOrderDTO placeOrder(ReqOrderDTO reqOrderDTO) {
 
         String userName = SecurityUtil.getCurrentUserLogin().orElse(null);
-
         User user = this.userRepository.findByEmail(userName);
-
         Cart cart = this.cartRepository.findByUser(user);
 
-        // reqOrderDTO.getOrderItems();
+        // Cách làm cũ là lấy id trong request được gửi lên nhưng ko thể lấy ra quantity
+        // vì phải lấy theo reqOrderDTO
+        // Lấy ra từng id product trong request được gửi lên sau đó gom thành List
+        // List<Long> ids = reqOrderDTO.getOrderItems().stream()
+        // .map(ReqOrderItemDTO::getProductId)
+        // .toList();
+        // List<Product> lists = this.productRepository.findByIdIn(ids);
 
-        List<Product> product = this.productRepository.findAll();
+        Map<Long, Integer> quantityMap = reqOrderDTO.getOrderItems().stream()
+                .collect(Collectors.toMap(
+                        ReqOrderItemDTO::getProductId,
+                        ReqOrderItemDTO::getQuantity));
 
-        // lỗi ngay đây , chưa tìm ra , xem lại OrderItemDTO
-        List<Long> ids = reqOrderDTO.getOrderItems().stream()
-                .map(OrderItemDTO::getId)
+        List<Product> lists = productRepository.findByIdIn(quantityMap.keySet());
+
+        List<ResOrderDTO.ResOrderItemDTO> resItems = lists.stream()
+                .map(p -> new ResOrderDTO.ResOrderItemDTO(
+                        p.getId(),
+                        quantityMap.get(p.getId()) // ✅ quantity lấy đúng chỗ
+                ))
                 .toList();
-
-        List<Long> test = List.of(1L, 5L, 7L);
-
-        List<Product> productTest = this.productRepository.findByIdIn(ids);
-
-        /*
-         * Chuyển cái list này thành DTO ====> trả ra list , ko trả ra nguyên cái
-         * product
-         */
-
-        // Viết lambda , gom hết toàn bộ thành list rồi phân rã từng phần tử ----> set
-        // ra DTO
-
-        List<Product> lists = this.productRepository.findByIdIn(ids);
-
-        // List<Object> reqSkills = (x) -> ()
-        // .stream().map(x -> x.getId())
-        // .collect(Collectors.toList());
 
         // Xử lý cart bằng null thì sẽ như thế nào ? nghĩ chưa ra
         // if (cart == null) {
 
         // }
-
         List<CartDetail> cartDetails = cart == null ? new ArrayList<CartDetail>() : cart.getCartDetails();
         long totalPrice = 0;
         for (CartDetail cd : cartDetails) {
@@ -84,9 +77,9 @@ public class OrderService {
         }
 
         ResOrderDTO resOrderDTO = new ResOrderDTO();
-        ResOrderDTO.OrderItemDTO com = new ResOrderDTO.OrderItemDTO();
-        for (Product convertReqOrderDTO : lists) {
-            resOrderDTO.setImage(convertReqOrderDTO.getImage());
+        ResOrderDTO.ResOrderItemDTO com = new ResOrderDTO.ResOrderItemDTO();
+        for (Product convertResOrderDTO : lists) {
+            resOrderDTO.setImage(convertResOrderDTO.getImage());
             resOrderDTO.setReceiverName(reqOrderDTO.getReceiverName());
             resOrderDTO.setReceiverAddress(reqOrderDTO.getReceiverAddress());
             resOrderDTO.setReceiverPhone(reqOrderDTO.getReceiverPhone());
@@ -94,23 +87,8 @@ public class OrderService {
             resOrderDTO.setPaymentStatus("PENDING");
             resOrderDTO.setPaymentMethod("BANKING");
             resOrderDTO.setTotal(totalPrice);
-            com.setId(convertReqOrderDTO.getId());
-            com.setQuantity(5);
+            resOrderDTO.setOrderItems(resItems);
         }
-
-        // // Đã trả ra như yêu cầu , giờ chỉ cần trả ra id , product client đã mua là OK !
-
-        
-
-        // ReqOrderDTO.OrderItemDTO orderItemDTO = new ReqOrderDTO.OrderItemDTO();
-
-        // resOrderDTO.setReceiverName(user.getName());
-        // resOrderDTO.setReceiverAddress(user.getAddress());
-        // resOrderDTO.setReceiverPhone(reqOrderDTO.getReceiverPhone());
-        // resOrderDTO.setStatus(reqOrderDTO.getPaymentMethod());
-        // resOrderDTO.setPaymentMethod(reqOrderDTO.getPaymentMethod());
-        // resOrderDTO.setOrderItems(lists);
-        // resOrderDTO.setOrderItems(lists);
 
         return resOrderDTO;
     }
