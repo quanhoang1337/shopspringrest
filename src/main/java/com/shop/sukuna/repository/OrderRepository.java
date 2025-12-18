@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.shop.sukuna.domain.Cart;
 import com.shop.sukuna.domain.Order;
 import com.shop.sukuna.domain.User;
 
@@ -14,7 +13,5 @@ import com.shop.sukuna.domain.User;
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
     List<Order> findByUser(User user);
-
-    
 
 }
