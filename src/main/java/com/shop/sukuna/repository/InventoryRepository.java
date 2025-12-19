@@ -8,5 +8,5 @@ import com.shop.sukuna.domain.Inventory;
 
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Long>, JpaSpecificationExecutor<Inventory> {
-
+    Inventory findByProductId(long id);
 }

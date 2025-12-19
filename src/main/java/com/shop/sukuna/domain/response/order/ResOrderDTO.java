@@ -38,6 +38,7 @@ public class ResOrderDTO {
     public static class ResOrderItemDTO {
         private long id;
         private int quantity;
+        private String image;
     }
 
 }
