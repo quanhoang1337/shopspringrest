@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.sukuna.domain.Inventory;
 import com.shop.sukuna.domain.Product;
+import com.shop.sukuna.domain.request.ReqInventoryDTO;
+import com.shop.sukuna.repository.InventoryRepository;
 import com.shop.sukuna.repository.ProductRepository;
 import com.shop.sukuna.service.InventoryService;
 import com.shop.sukuna.util.annotation.ApiMessage;
@@ -21,18 +24,29 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
     private final ProductRepository productRepository;
+    private final InventoryRepository inventoryRepository;
 
-    public InventoryController(InventoryService inventoryService, ProductRepository productRepository) {
+    public InventoryController(InventoryService inventoryService, ProductRepository productRepository,
+            InventoryRepository inventoryRepository) {
         this.inventoryService = inventoryService;
         this.productRepository = productRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     // Create inventory
     @PostMapping("/inventories")
     @ApiMessage("Create an inventory")
     public ResponseEntity<Inventory> createInventory(@Valid @RequestBody Inventory inventory) {
-        Optional<Product> product = productRepository.findById(inventory.getProduct().getId());
+        Optional<Product> product = this.productRepository.findById(inventory.getProduct().getId());
         inventory.setProduct(product.get());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.inventoryService.createInventory(inventory));
+    }
+
+    // Update inventory
+    @PutMapping("/inventories")
+    @ApiMessage("Updated an inventory")
+    public ResponseEntity<ReqInventoryDTO> updateInventory(@Valid @RequestBody ReqInventoryDTO reqInventoryDTO) {
+        Inventory inventory = this.inventoryRepository.findByProductId(reqInventoryDTO.getProductId());
+        return ResponseEntity.ok(this.inventoryService.updateInventory(inventory, reqInventoryDTO));
     }
 }

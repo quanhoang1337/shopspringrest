@@ -1,8 +1,8 @@
 package com.shop.sukuna.service;
 
-import org.springframework.stereotype.Service;
-
 import com.shop.sukuna.domain.Inventory;
+import org.springframework.stereotype.Service;
+import com.shop.sukuna.domain.request.ReqInventoryDTO;
 import com.shop.sukuna.repository.InventoryRepository;
 
 @Service
@@ -16,6 +16,14 @@ public class InventoryService {
 
     public Inventory createInventory(Inventory inventory) {
         return this.inventoryRepository.save(inventory);
+    }
+
+    public ReqInventoryDTO updateInventory(Inventory inventory, ReqInventoryDTO reqInventoryDTO) {
+        inventory.setQuantity(inventory.getQuantity() + reqInventoryDTO.getQuantity());
+        this.inventoryRepository.save(inventory);
+        reqInventoryDTO.setProductId(inventory.getProduct().getId());
+        reqInventoryDTO.setQuantity(inventory.getQuantity());
+        return reqInventoryDTO;
     }
 
 }

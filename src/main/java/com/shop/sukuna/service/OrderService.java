@@ -77,7 +77,8 @@ public class OrderService {
 
         // Lấy ra quantity đã đặt , trừ thẳng vào inventory của mỗi product , save xuống
         // DB
-        // Giải quyết trường hợp inventory ko đủ số lượng order gửi (inventory âm hoặc ko đủ để client đặt)
+        // Giải quyết trường hợp inventory ko đủ số lượng order gửi (inventory âm hoặc
+        // ko đủ để client đặt)
         for (Product product : lists) {
             Integer orderQuantity = quantityMap.get(product.getId());
             Inventory inventory = this.inventoryRepository.findByProductId(product.getId());
